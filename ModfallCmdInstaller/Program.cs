@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ionic.Zip;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -159,7 +160,13 @@ namespace Modfall.MiniInstaller
                     File.Delete(f);
                 }
             }
-            ZipFile.ExtractToDirectory(Path.Combine(InstallerPath, $"Modfall{version.Ver}.zip"), tempPath);
+            // Not available in .Net Framework 4.0, we'll use DotNetZip instead
+            //ZipFile.ExtractToDirectory(Path.Combine(InstallerPath, $"Modfall{version.Ver}.zip"), tempPath);
+            ZipFile file = ZipFile.Read(Path.Combine(InstallerPath, $"Modfall{version.Ver}.zip"));
+            file.ExtractAll(tempPath);
+            file.Dispose();
+
+
             File.Copy(Path.Combine(InstallerPath, "SharpDX.dll"), Path.Combine(tempPath, "SharpDX.dll"));
             File.Copy(Path.Combine(InstallerPath, "SharpDX.DirectInput.dll"), Path.Combine(tempPath, "SharpDX.DirectInput.dll"));
             File.Copy(Path.Combine(InstallerPath, "MonoMod.RuntimeDetour.HookGen.exe"), Path.Combine(tempPath, "MonoMod.RuntimeDetour.HookGen.exe"));
