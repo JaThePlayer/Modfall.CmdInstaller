@@ -103,6 +103,13 @@ namespace Modfall.MiniInstaller
                     dest = Path.Combine(Path.GetDirectoryName(ExePath), $"MONOMODDED_{ExeFileName}");
                     Console.WriteLine($"Copying {source} to {dest}");
                     File.Copy(source, dest, true);
+                    source = Path.Combine(tempPath, $"Modfall.CmdInstaller.exe");
+                    if (File.Exists(source))
+                    {
+                        dest = Path.Combine(Path.GetDirectoryName(ExePath), "Modfall.CmdInstaller.exe");
+                        File.Copy(source, dest, true);
+                    }
+                    
 
                     Console.WriteLine("Clearing Temp folder...");
                     foreach (string f in Directory.GetFiles(tempPath))
@@ -167,9 +174,9 @@ namespace Modfall.MiniInstaller
             file.Dispose();
 
 
-            File.Copy(Path.Combine(InstallerPath, "SharpDX.dll"), Path.Combine(tempPath, "SharpDX.dll"));
-            File.Copy(Path.Combine(InstallerPath, "SharpDX.DirectInput.dll"), Path.Combine(tempPath, "SharpDX.DirectInput.dll"));
-            File.Copy(Path.Combine(InstallerPath, "MonoMod.RuntimeDetour.HookGen.exe"), Path.Combine(tempPath, "MonoMod.RuntimeDetour.HookGen.exe"));
+            File.Copy(Path.Combine(InstallerPath, "SharpDX.dll"), Path.Combine(tempPath, "SharpDX.dll"), true);
+            File.Copy(Path.Combine(InstallerPath, "SharpDX.DirectInput.dll"), Path.Combine(tempPath, "SharpDX.DirectInput.dll"), true);
+            File.Copy(Path.Combine(InstallerPath, "MonoMod.RuntimeDetour.HookGen.exe"), Path.Combine(tempPath, "MonoMod.RuntimeDetour.HookGen.exe"), true);
             File.Delete(Path.Combine(InstallerPath, $"Modfall{version.Ver}.zip"));
 
         }
