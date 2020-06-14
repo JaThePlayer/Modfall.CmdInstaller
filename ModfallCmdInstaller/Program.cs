@@ -10,7 +10,7 @@ namespace Modfall.MiniInstaller
 {
     class Program
     {
-        public static string Ver = "1.0";
+        public static string Ver = "1.4";
 
         public static string ExePath = "";
         public static string ExeFileName;
@@ -95,10 +95,17 @@ namespace Modfall.MiniInstaller
                     Console.WriteLine($"Copying {ExePath} to {newExeFileName}");
                     File.Copy(ExePath, newExeFileName, true);
                     RunMonomod();
+                    foreach (string file in Directory.GetFiles(tempPath))
+                    {
+                        string dest = Path.Combine(Path.GetDirectoryName(ExePath), Path.GetFileName(file));
+                        File.Copy(file, dest, true);
+                    }
+                    /*
                     string source = Path.Combine(tempPath, $"MMHOOK_{Path.GetFileNameWithoutExtension(ExeFileName)}.dll");
                     string dest = Path.Combine(Path.GetDirectoryName(ExePath), $"MMHOOK_{Path.GetFileNameWithoutExtension(ExeFileName)}.dll");
                     Console.WriteLine($"Copying {source} to {dest}");
                     File.Copy(source, dest, true);
+                    
                     source = Path.Combine(tempPath, $"MONOMODDED_{ExeFileName}");
                     dest = Path.Combine(Path.GetDirectoryName(ExePath), $"MONOMODDED_{ExeFileName}");
                     Console.WriteLine($"Copying {source} to {dest}");
@@ -108,8 +115,8 @@ namespace Modfall.MiniInstaller
                     {
                         dest = Path.Combine(Path.GetDirectoryName(ExePath), "Modfall.CmdInstaller.exe");
                         File.Copy(source, dest, true);
-                    }
-                    
+                    } */
+
 
                     Console.WriteLine("Clearing Temp folder...");
                     foreach (string f in Directory.GetFiles(tempPath))
@@ -184,7 +191,7 @@ namespace Modfall.MiniInstaller
         public static void RunMonomod()
         {
             ExecuteCommand($"{Path.Combine("Temp", "MonoMod.exe")} {Path.Combine("Temp", ExeFileName)}");
-            ExecuteCommand($"{Path.Combine("Temp", "MonoMod.RuntimeDetour.HookGen.exe")} {Path.Combine("Temp", ExeFileName)}");
+            ExecuteCommand($"{Path.Combine("Temp", "MonoMod.RuntimeDetour.HookGen.exe --private")} {Path.Combine("Temp", ExeFileName)}");
         }
 
         public static void DisplayHelp()
